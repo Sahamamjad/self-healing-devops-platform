@@ -1,0 +1,12 @@
+# Local kind/minikube-style values. Build the image locally and load it into the cluster.
+replicaCount: 1
+image:
+  repository: self-healing-devops-platform
+  tag: local
+  pullPolicy: Never
+env:
+  APP_ENV: development
+  DEMO_FAILURE_ENABLED: "false"
+  REMEDIATION_DRY_RUN_ONLY: "true"
+ingress:
+  enabled: false

@@ -1,0 +1,9 @@
+Release {{ .Release.Name }} rendered the self-healing-platform chart.
+
+Service port: {{ .Values.service.port }}
+Container port: 8000
+Replicas: {{ .Values.replicaCount }} (SQLite is not multi-replica safe)
+Image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+
+This chart does not create cluster credentials. Supply Secrets out of band.
+Cluster rollout is unverified until kubectl reports Ready pods.

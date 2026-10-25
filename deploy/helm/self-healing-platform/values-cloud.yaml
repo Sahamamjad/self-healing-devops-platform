@@ -1,0 +1,13 @@
+# Optional cloud values. Replace the image tag with an immutable commit SHA after a verified release.
+replicaCount: 1
+image:
+  repository: ghcr.io/example/self-healing-devops-platform
+  tag: "replace-with-commit-sha"
+  pullPolicy: IfNotPresent
+env:
+  APP_ENV: production
+  DEMO_FAILURE_ENABLED: "false"
+ingress:
+  enabled: false
+networkPolicy:
+  enabled: true

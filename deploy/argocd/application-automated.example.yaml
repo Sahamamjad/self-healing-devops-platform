@@ -1,0 +1,22 @@
+# EXAMPLE ONLY. Automated sync with prune+selfHeal can delete cluster objects that
+# are missing from Git. Do not apply this file unless you understand that risk.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: self-healing-platform
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/REPLACE_OWNER/self-healing-devops-platform.git
+    targetRevision: HEAD
+    path: deploy/helm/self-healing-platform
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: self-healing
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

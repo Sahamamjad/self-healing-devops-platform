@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=75.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "self-healing-devops-platform"
+version = "0.1.0"
+description = "Local-first, evidence-based incident analysis and safe remediation demonstration platform."
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = { text = "MIT" }
+authors = [{ name = "self-healing-devops-platform" }]
+dependencies = [
+  "fastapi>=0.159.1,<0.160",
+  "pydantic>=2.14.1,<2.15",
+  "pydantic-settings>=2.16.1,<2.17",
+  "uvicorn[standard]>=0.54.0,<0.55",
+  "sqlalchemy>=2.0.40,<2.2",
+  "alembic>=1.20.0,<1.21",
+  "prometheus-client>=0.26.0,<0.27",
+  "httpx>=0.28.1,<0.29",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=9.1.1,<10",
+  "pytest-cov>=7.1.0,<8",
+  "ruff==0.17.1",
+  "bandit>=1.9.4,<1.10",
+  "pip-audit>=2.10.1,<3",
+  "pyyaml>=6.0.3,<7",
+  "httpx2>=2.16.0,<2.17",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+markers = [
+  "docker: requires a running Docker daemon",
+  "kubernetes: requires a reachable Kubernetes API",
+  "network: requires outbound network access",
+]
+
+[tool.coverage.run]
+source = ["self_healing_platform"]
+branch = true
+omit = ["src/self_healing_platform/__main__.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N"]
+# E501: explanatory incident strings are clearer unwrapped.
+# B008: FastAPI uses Depends() and Query() in argument defaults.
+ignore = ["E501", "B008"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv"]
+skips = ["B101"]

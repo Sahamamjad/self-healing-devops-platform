@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: self-healing-platform
+  namespace: self-healing
+data:
+  APP_ENV: "production"
+  DEMO_FAILURE_ENABLED: "false"
+  REMEDIATION_ENABLED: "false"
+  REMEDIATION_DRY_RUN_ONLY: "true"
+  AI_SUMMARIES_ENABLED: "false"
+  DATABASE_URL: "sqlite+pysqlite:////data/app.sqlite"
+  LOG_LEVEL: "INFO"
+  HOME: "/tmp"

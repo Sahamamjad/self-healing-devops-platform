@@ -1,0 +1,77 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/example/self-healing-devops-platform
+  # Replace with an immutable sha-<git-commit> before any shared or cloud deploy.
+  # 0.1.0 matches Chart.appVersion and is not a floating tag.
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: false
+  name: ""
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+persistence:
+  enabled: true
+  size: 1Gi
+  accessMode: ReadWriteOnce
+  storageClass: ""
+
+ingress:
+  enabled: false
+  className: ""
+  hosts:
+    - host: self-healing.local
+      paths:
+        - path: /
+          pathType: Prefix
+
+env:
+  APP_ENV: production
+  DEMO_FAILURE_ENABLED: "false"
+  REMEDIATION_ENABLED: "false"
+  REMEDIATION_DRY_RUN_ONLY: "true"
+  AI_SUMMARIES_ENABLED: "false"
+  DATABASE_URL: sqlite+pysqlite:////data/app.sqlite
+  LOG_LEVEL: INFO
+  HOME: /tmp
+
+existingSecret: ""
+
+networkPolicy:
+  enabled: true
+
+strategy:
+  type: Recreate

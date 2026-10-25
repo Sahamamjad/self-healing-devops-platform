@@ -1,0 +1,41 @@
+groups:
+  - name: self-healing-platform
+    rules:
+      - alert: ServiceUnavailable
+        expr: up{job="self-healing-app"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Application scrape target is down
+          description: Prometheus has been unable to scrape self-healing-app for 2 minutes.
+          runbook: docs/OPERATIONS.md#serviceunavailable
+
+      - alert: ElevatedErrorRatio
+        expr: |
+          (
+            sum(rate(http_requests_total{status=~"5.."}[5m]))
+            /
+            clamp_min(sum(rate(http_requests_total[5m])), 0.001)
+          ) > 0.10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Elevated HTTP 5xx ratio
+          description: 5xx ratio exceeded 10% over 5 minutes with a denominator guard of 0.001.
+          runbook: docs/OPERATIONS.md#elevatederrorratio
+
+      - alert: HighRequestLatency
+        expr: |
+          histogram_quantile(
+            0.99,
+            sum(rate(http_request_duration_seconds_bucket[5m])) by (le)
+          ) > 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: High p99 request latency
+          description: Estimated p99 latency exceeded 1 second for 10 minutes.
+          runbook: docs/OPERATIONS.md#highrequestlatency
