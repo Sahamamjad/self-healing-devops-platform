@@ -83,6 +83,12 @@ These images were captured from the API on this machine on 26 October 2026, whil
 
 ![Swagger UI listing the local API operations](docs/screenshots/api-docs.png)
 
+### Service identity
+
+`GET /` returns the service name and version.
+
+![Root JSON from the local API](docs/screenshots/root.png)
+
 ### Readiness
 
 `GET /health/ready` reported the database as ready.
