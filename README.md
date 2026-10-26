@@ -18,16 +18,16 @@ The application is a FastAPI service with a deterministic analysis engine, SQLit
 
 ```mermaid
 flowchart LR
-  operator[Operator] --> api[FastAPI :8000]
+  operator[Operator] --> api["FastAPI :8000"]
   api --> db[(SQLite)]
-  api --> metrics[/metrics]
+  api --> metrics["/metrics"]
   metrics --> prom[Prometheus]
   prom --> graf[Grafana]
   api --> engine[Deterministic analysis]
   engine --> api
-  git[Git + Helm chart] --> argo[Argo CD manual sync]
+  git["Git and Helm chart"] --> argo[Argo CD manual sync]
   argo --> k8s[Kubernetes single replica]
-  tf[Terraform AWS] -. optional, not applied .-> eks[EKS]
+  tf[Terraform AWS] -.->|"optional, not applied"| eks[EKS]
 ```
 
 Kubernetes restarting a crashed container, Argo CD reconciling Git, and this application recommending a fix are three different mechanisms. This service only recommends and, when explicitly approved, records a simulated action.
