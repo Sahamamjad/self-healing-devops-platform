@@ -75,6 +75,36 @@ python -m self_healing_platform
 
 Makefile targets (macOS/Linux): `make install`, `make test`, `make lint`, `make migrate`, `make run`, `make compose-up`, `make compose-down`, `make smoke`, `make verify`.
 
+## Local output
+
+These images were captured from the API on this machine on 26 October 2026, while it was listening on `http://127.0.0.1:8000`. Docker was not running, so Prometheus and Grafana are not shown.
+
+### API documentation
+
+![Swagger UI listing the local API operations](docs/screenshots/api-docs.png)
+
+### Readiness
+
+`GET /health/ready` reported the database as ready.
+
+![Readiness JSON from the local API](docs/screenshots/health-ready.png)
+
+### Service status
+
+![Status JSON from the local API](docs/screenshots/status.png)
+
+### Incident analysis
+
+`POST /api/v1/incidents/analyze` with a sample of 25 errors in 100 requests. The stored incident is `elevated_5xx`, severity high, lifecycle `Proposed`, and the proposed action is the allowlisted simulation `simulate_clear_demo_failure`.
+
+![Incident analysis JSON from the local API](docs/screenshots/incident.png)
+
+### Metrics
+
+The start of `GET /metrics`, including `http_requests_total`.
+
+![Prometheus metrics text from the local API](docs/screenshots/metrics.png)
+
 ## Environment
 
 Copy `.env.example` to `.env` if you want overrides. No secret is required to start.
